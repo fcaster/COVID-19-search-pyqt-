@@ -4,7 +4,7 @@ import requests
 from PyQt5.QtWidgets import QApplication,QMainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class mainwindow(QMainWindow):
+class Mainwindow(QMainWindow):
     '''
     主窗口类
     '''
@@ -40,7 +40,7 @@ class mainwindow(QMainWindow):
         self.data = []
 
         # 初始化类
-        self.ui = test3.Ui_MainWindow()
+        self.ui = mainwindow.Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui.pushButton_2.setToolTip("1. 本项目完全出于公益目的，API无偿开放给非商业目的人士使用，\n\
 如果未来用作商业目的或产生任何不必要的版权纠纷，本项目不负任何责任；\n\
@@ -128,6 +128,6 @@ class mainwindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    w = mainwindow()
+    w = Mainwindow()
     w.show()
     sys.exit(app.exec_())
