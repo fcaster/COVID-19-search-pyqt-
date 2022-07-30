@@ -1,4 +1,6 @@
 import sys
+import time
+
 import mainwindow
 import requests
 from PyQt5.QtWidgets import QApplication,QMainWindow
@@ -21,10 +23,10 @@ class Mainwindow(QMainWindow):
         self.ui:    Ui_mainwindow类实例
                     type: Ui_mainwindow
         '''
-        self.provinceName = ['上海市','云南省', '内蒙古自治区',  '北京市',  '台湾', '吉林省', '四川省', '天津市', \
-                    '宁夏回族自治区', '安徽省', '山东省', '山西省', '广东省', '广西壮族自治区','新疆维吾尔自治区',\
-                    '江苏省', '江西省', '河北省', '河南省','浙江省', '海南省', '湖北省', '湖南省', '澳门',\
-                    '甘肃省', '福建省', '西藏自治区', '贵州省', '辽宁省', '重庆市', '陕西省', '青海省', '香港', '黑龙江省']
+        self.provinceName = ['上海', '云南', '内蒙古自治区', '北京', '台湾', '吉林省', '四川省', '天津市', \
+                             '宁夏回族自治区', '安徽省', '山东省', '山西省', '广东省', '广西壮族自治区', '新疆维吾尔自治区', \
+                             '江苏省', '江西省', '河北省', '河南省', '浙江省', '海南省', '湖北省', '湖南省', '澳门', \
+                             '甘肃省', '福建省', '西藏自治区', '贵州省', '辽宁省', '重庆市', '陕西省', '青海省', '香港', '黑龙江省']
         self.url = \
             [
                 # 0 按省份名称获取信息的接口
@@ -83,25 +85,35 @@ class Mainwindow(QMainWindow):
         self.data = reqArea.json()['results']
         n = 0
         for i in range(len(self.data)):
+            if n>=len(self.provinceInfo):
+                break
             if self.data[i]['countryEnglishName'] == "China":
+
                 self.provinceInfo[n].setText(0, str(self.data[i]['provinceName']))
                 self.provinceInfo[n].setText(1, str(self.data[i]['confirmedCount']))
                 self.provinceInfo[n].setText(2, str(self.data[i]['currentConfirmedCount']))
                 self.provinceInfo[n].setText(3, str(self.data[i]['curedCount']))
                 self.provinceInfo[n].setText(4, str(self.data[i]['deadCount']))
-                if len(self.data[i]['cities']) > 0:
+                try:
+                    if len(self.data[i]['cities']) > 0:
 
-                    cityInfo = [QtWidgets.QTreeWidgetItem(self.provinceInfo[n]) for k in range(len(self.data[i]['cities']))]
-                    for j in range(len(self.data[i]['cities'])):
-                        cityInfo[j].setText(0, str(self.data[i]['cities'][j]['cityName']))
-                        cityInfo[j].setText(1, str(self.data[i]['cities'][j]['confirmedCount']))
-                        cityInfo[j].setText(2, str(self.data[i]['cities'][j]['currentConfirmedCount']))
-                        cityInfo[j].setText(3, str(self.data[i]['cities'][j]['curedCount']))
-                        cityInfo[j].setText(4, str(self.data[i]['cities'][j]['deadCount']))
+                        cityInfo = [QtWidgets.QTreeWidgetItem(self.provinceInfo[n]) for k in range(len(self.data[i]['cities']))]
+                        for j in range(len(self.data[i]['cities'])):
+                            cityInfo[j].setText(0, str(self.data[i]['cities'][j]['cityName']))
+                            cityInfo[j].setText(1, str(self.data[i]['cities'][j]['confirmedCount']))
+                            cityInfo[j].setText(2, str(self.data[i]['cities'][j]['currentConfirmedCount']))
+                            cityInfo[j].setText(3, str(self.data[i]['cities'][j]['curedCount']))
+                            cityInfo[j].setText(4, str(self.data[i]['cities'][j]['deadCount']))
+                except:
+                    pass
                 n+=1
+
+
+
         n = 0
         for i in range(len(self.data)):
             if self.data[i]['countryEnglishName'] != "China":
+
                 self.countryInfo[n].setText(0, str(self.data[i]['countryName']))
                 self.countryInfo[n].setText(1, str(self.data[i]['confirmedCount']))
                 self.countryInfo[n].setText(2, str(self.data[i]['currentConfirmedCount']))
